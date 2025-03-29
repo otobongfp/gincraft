@@ -16,7 +16,7 @@ A CLI tool for quickly scaffolding Gin web applications with a clean architectur
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/gincraft.git
+git clone https://github.com/otobongfp/gincraft.git
 cd gincraft
 
 # Install dependencies
@@ -32,7 +32,7 @@ sudo mv gincraft /usr/local/bin/
 ### Using Go Install
 
 ```bash
-go install github.com/yourusername/gincraft@latest
+go install github.com/otobongfp/gincraft@latest
 ```
 
 ## Usage
@@ -68,7 +68,7 @@ myapp/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/gincraft.git
+   git clone https://github.com/otobongfp/gincraft.git
    cd gincraft
    ```
 
