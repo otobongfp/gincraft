@@ -19,6 +19,14 @@ go mod tidy
 go run main.go
 ```
 
+## Updating
+
+To update your global installation to the latest version:
+
+```bash
+go install github.com/otobongfp/gincraft@latest
+```
+
 ## Contributing
 
 1. Fork the repository

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"os"
 	"os/exec"
@@ -10,6 +11,9 @@ import (
 
 	"github.com/spf13/cobra"
 )
+
+//go:embed templates/*
+var embeddedTemplates embed.FS
 
 var newCmd = &cobra.Command{
 	Use:   "new [project-name]",
@@ -74,7 +78,7 @@ func scaffoldProject(name string) error {
 	}
 
 	// Create README.md from template
-	tmpl, err := template.ParseFiles("templates/README.md.tmpl")
+	tmpl, err := template.ParseFS(embeddedTemplates, "templates/README.md.tmpl")
 	if err != nil {
 		return fmt.Errorf("failed to parse README template: %w", err)
 	}
@@ -90,7 +94,7 @@ func scaffoldProject(name string) error {
 	}
 
 	// Create .gitignore from template
-	tmpl, err = template.ParseFiles("templates/.gitignore.tmpl")
+	tmpl, err = template.ParseFS(embeddedTemplates, "templates/.gitignore.tmpl")
 	if err != nil {
 		return fmt.Errorf("failed to parse .gitignore template: %w", err)
 	}
@@ -106,7 +110,7 @@ func scaffoldProject(name string) error {
 	}
 
 	// Create main.go from template
-	tmpl, err = template.ParseFiles("templates/main.tmpl")
+	tmpl, err = template.ParseFS(embeddedTemplates, "templates/main.tmpl")
 	if err != nil {
 		return fmt.Errorf("failed to parse main template: %w", err)
 	}
@@ -135,22 +139,19 @@ func scaffoldProject(name string) error {
 			return fmt.Errorf("failed to create directory %s: %w", dir, err)
 		}
 
-		// Copy template file if it exists
-		templateFile := filepath.Join("templates", dir, file)
-		if _, err := os.Stat(templateFile); err == nil {
-			content, err := os.ReadFile(templateFile)
-			if err != nil {
-				return fmt.Errorf("failed to read template file %s: %w", templateFile, err)
-			}
+		// Read template file from embedded filesystem
+		content, err := embeddedTemplates.ReadFile(filepath.Join("templates", dir, file))
+		if err != nil {
+			return fmt.Errorf("failed to read template file %s: %w", file, err)
+		}
 
-			// Replace template variables
-			contentStr := string(content)
-			contentStr = strings.ReplaceAll(contentStr, "PROJECT_NAME", name)
-			contentStr = strings.ReplaceAll(contentStr, "{{.ProjectName}}", name)
+		// Replace template variables
+		contentStr := string(content)
+		contentStr = strings.ReplaceAll(contentStr, "PROJECT_NAME", name)
+		contentStr = strings.ReplaceAll(contentStr, "{{.ProjectName}}", name)
 
-			if err := os.WriteFile(filepath.Join(dirPath, file), []byte(contentStr), 0644); err != nil {
-				return fmt.Errorf("failed to write template file %s: %w", templateFile, err)
-			}
+		if err := os.WriteFile(filepath.Join(dirPath, file), []byte(contentStr), 0644); err != nil {
+			return fmt.Errorf("failed to write template file %s: %w", file, err)
 		}
 	}
 
