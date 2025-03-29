@@ -1,15 +1,22 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"{{.ProjectName}}/controllers"
+	"{{.ProjectName}}/routes"
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Welcome to {{.ProjectName}}!",
-		})
-	})
-	r.Run()
+	// Create a new Gin router
+	router := gin.Default()
+
+	// Initialize routes
+	routes.SetupRoutes(router)
+
+	// Start the server
+	if err := router.Run(":8080"); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 } 

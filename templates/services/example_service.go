@@ -23,4 +23,11 @@ func (s *ExampleService) GetAllExamples() ([]models.Example, error) {
 func (s *ExampleService) GetExampleByID(id uint) (*models.Example, error) {
 	// TODO: Implement database query
 	return nil, errors.New("not implemented")
+}
+
+func (s *ExampleService) GetExample() (map[string]interface{}, error) {
+	return map[string]interface{}{
+		"message": "This is an example service response",
+		"status":  "success",
+	}, nil
 } 
