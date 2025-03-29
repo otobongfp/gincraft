@@ -89,19 +89,6 @@ myapp/
    ./gincraft new testapp
    ```
 
-### Testing
-
-The project includes comprehensive tests for all components:
-
-```bash
-# Run all tests
-go test ./...
-
-# Run tests with coverage
-go test ./... -coverprofile=coverage.txt
-go tool cover -html=coverage.txt
-```
-
 ## Contributing
 
 1. Fork the repository
