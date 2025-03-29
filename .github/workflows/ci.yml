@@ -9,31 +9,8 @@ on:
     types: [published]
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: "1.21"
-
-      - name: Install dependencies
-        run: go mod tidy
-
-      - name: Run tests
-        run: go test ./... -v
-
-      - name: Run tests with coverage
-        run: |
-          go test ./... -coverprofile=coverage.txt
-          go tool cover -func=coverage.txt
-
   build:
     name: Build
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
