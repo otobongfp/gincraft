@@ -73,8 +73,9 @@ func scaffoldProject(name string) error {
 	// Initialize the module first
 	initCmd := exec.Command("go", "mod", "init", name)
 	initCmd.Dir = projectDir
-	if err := initCmd.Run(); err != nil {
-		return fmt.Errorf("failed to initialize module: %w", err)
+	output, err := initCmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to initialize module: %s\n%s", err, string(output))
 	}
 
 	// Create README.md from template
@@ -158,15 +159,17 @@ func scaffoldProject(name string) error {
 	// Add gin dependency
 	addCmd := exec.Command("go", "get", "github.com/gin-gonic/gin@latest")
 	addCmd.Dir = projectDir
-	if err := addCmd.Run(); err != nil {
-		return fmt.Errorf("failed to add gin dependency: %w", err)
+	output, err = addCmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to add gin dependency: %s\n%s", err, string(output))
 	}
 
 	// Run go mod tidy
 	tidyCmd := exec.Command("go", "mod", "tidy")
 	tidyCmd.Dir = projectDir
-	if err := tidyCmd.Run(); err != nil {
-		return fmt.Errorf("failed to run go mod tidy: %w", err)
+	output, err = tidyCmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to run go mod tidy: %s\n%s", err, string(output))
 	}
 
 	return nil
