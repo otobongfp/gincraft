@@ -1,10 +1,9 @@
 package routes
 
 import (
-	"PROJECT_NAME/controllers"
-	"PROJECT_NAME/services"
-
 	"github.com/gin-gonic/gin"
+	"{{.ProjectName}}/controllers"
+	"{{.ProjectName}}/services"
 )
 
 // RegisterRoutes registers all routes for the application

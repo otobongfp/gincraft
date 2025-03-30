@@ -3,9 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"PROJECT_NAME/services"
-
 	"github.com/gin-gonic/gin"
+	"{{.ProjectName}}/services"
 )
 
 // ExampleController handles example-related requests

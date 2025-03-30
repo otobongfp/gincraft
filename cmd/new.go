@@ -72,7 +72,7 @@ func scaffoldProject(name string) error {
 
 	// Create go.mod with correct module path
 	modFile := filepath.Join(projectDir, "go.mod")
-	modContent := fmt.Sprintf("module %s\n\ngo 1.21\n\nrequire github.com/gin-gonic/gin v1.9.1\n", name)
+	modContent := fmt.Sprintf("module %s\n\ngo 1.21\n\nrequire (\n\tgithub.com/gin-gonic/gin v1.9.1\n)\n", name)
 	if err := os.WriteFile(modFile, []byte(modContent), 0644); err != nil {
 		return fmt.Errorf("failed to create go.mod: %w", err)
 	}
@@ -159,7 +159,17 @@ func scaffoldProject(name string) error {
 	cmd := exec.Command("go", "mod", "tidy")
 	cmd.Dir = projectDir
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("failed to run go mod tidy: %w", err)
+		// Try initializing the module first
+		initCmd := exec.Command("go", "mod", "init", name)
+		initCmd.Dir = projectDir
+		if err := initCmd.Run(); err != nil {
+			return fmt.Errorf("failed to initialize module: %w", err)
+		}
+
+		// Try go mod tidy again
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("failed to run go mod tidy: %w", err)
+		}
 	}
 
 	return nil
